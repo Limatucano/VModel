@@ -1,5 +1,6 @@
 package correa.matheus.vmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 

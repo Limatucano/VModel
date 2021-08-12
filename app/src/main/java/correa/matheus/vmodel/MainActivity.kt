@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.ContentView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,37 +15,32 @@ class MainActivity : AppCompatActivity() {
     lateinit var btnDados : Button
     lateinit var btnMostrar : Button
 
-    var contador: Int = 0
+    lateinit var mviewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initDados()
-        initContador()
         initClick()
-        validaContador()
     }
-    fun validaContador(){
-        if(contador > 5){
-            contador = 0
-        }
-    }
+
     fun initClick(){
         btnDados.setOnClickListener {
-            contador++
-            validaContador()
-            initContador()
+            mviewModel.Contador()
         }
         btnMostrar.setOnClickListener {
-            Toast.makeText(this,"Valor $contador", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,"Valor ${mviewModel.mContador.value}", Toast.LENGTH_SHORT).show()
         }
     }
-    fun initContador(){
-        txtValor.setText(contador.toString())
-    }
+
     fun initDados(){
+        mviewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         txtValor = findViewById(R.id.valor)
         btnDados = findViewById(R.id.dados)
         btnMostrar = findViewById(R.id.mostrar)
+
+        mviewModel.mContador.observe(this, Observer {
+            txtValor.setText(it)
+        })
     }
 }
